@@ -1,7 +1,10 @@
 import { create } from "zustand";
 import { io } from "socket.io-client";
-import axiosInstance from "../pages/axios";
+import axiosInstance from "../lib/axios";
 import toast from "react-hot-toast";
+
+const baseURL = import.meta.env.MODE === "development"? "http://localhost:3000/":"/";
+
 
 export const useAuthStore = create((set, get) => ({
   authUser: null,
@@ -79,7 +82,7 @@ export const useAuthStore = create((set, get) => ({
   connectSocket: () => {
     const { authUser } = get();
     if (!authUser) return;
-    const socket = io("http://localhost:3000", {
+    const socket = io(baseURL, {
       query: {
         userId: authUser._id,
       },
